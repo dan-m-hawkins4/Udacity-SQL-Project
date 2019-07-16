@@ -1,0 +1,26 @@
+/* Query from Question 1 put into a CTE and named Family Films */
+WITH Family_Films AS 
+(SELECT film.title AS Film_Title, 
+Cat.name AS Film_Category, 
+film.rental_duration AS Rental_Duration
+
+/* Tables we're JOINing and condidtions */
+FROM category cat
+JOIN film_category fc
+ON cat.category_id = fc.category_id
+JOIN film
+ON fc.film_id = film.film_id
+JOIN inventory inv
+ON film.film_id = inv.film_id
+JOIN rental ren
+ON inv.inventory_id = ren.inventory_id
+
+/* Organization of the JOINs and data */
+WHERE cat.name = 'Animation' OR cat.name = 'Children' OR cat.name = 'Classics' OR cat.name = 'Comedy' OR cat.name = 'Family' OR cat.name = 'Music'
+GROUP BY 1, 2, 3
+ORDER BY 3)
+
+/* Getting the rankings of the 4 quartiles, based on shortest rental time */
+SELECT *,
+NTILE(4) OVER (ORDER BY rental_duration) AS standard_quartile
+FROM Family_Films;

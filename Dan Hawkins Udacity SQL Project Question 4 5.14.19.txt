@@ -1,0 +1,18 @@
+/* Question four country rental count */
+SELECT coun.country AS Country_Name, 
+COUNT(ren.rental_id) AS Rental_Count
+
+/* Tables we're JOINing */
+FROM rental ren
+JOIN customer cust
+ON ren.customer_id = cust.customer_id
+JOIN address add
+ON add.address_id = cust.address_id
+JOIN city
+ON city.city_id = add.city_id
+JOIN country coun
+ON coun.country_id = city.country_id
+
+/* Organization of the JOINs and data */
+GROUP BY 1
+ORDER BY 2 DESC;
